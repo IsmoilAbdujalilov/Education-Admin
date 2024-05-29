@@ -59,7 +59,7 @@ const Course = () => {
               <th>Продолжительность</th>
               <th>Учиться</th>
               <th>Читать</th>
-              <th>Выключатель</th>
+              {/* <th>Выключатель</th> */}
               <th>Редактировать</th>
               <th>Удалить</th>
             </tr>
@@ -134,7 +134,7 @@ const Course = () => {
                       })}
                     </select>
                   </td>
-                  <td className="text-center">
+                  {/* <td className="text-center">
                     <div className="form-check form-switch">
                       <input
                         role="switch"
@@ -144,7 +144,7 @@ const Course = () => {
                         checked={el.course_isactive}
                       />
                     </div>
-                  </td>
+                  </td> */}
                   <td className="text-center">
                     <i
                       className="fas fa-eye fs-3"

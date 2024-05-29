@@ -20,7 +20,6 @@ const EditCourse = () => {
   const [course_description, setDescription] = useState<string>("");
   const [categoryData, setCategoryData] = useState<[]>([]);
   const [course_duration, setCourseDuration] = useState<string>("");
-  const [sections, setSections] = useState<any>({});
 
   const addUser = (e: any) => {
     e.preventDefault();
@@ -102,7 +101,6 @@ const EditCourse = () => {
     fetch(`https://shohsulton.uz/api/cources/${id}`)
       .then((res) => res.json())
       .then((data: any) => {
-        setSections(data.data);
         setCourseName(data.data.course_name);
         setDescription(data.data.course_description);
         setCoursePrice(data.data.course_price);
@@ -113,7 +111,6 @@ const EditCourse = () => {
         setCourseChecked(data.data.course_isactive);
       });
   }, []);
-
 
   return (
     <section className="px-3 py-3">
@@ -374,7 +371,7 @@ const EditCourse = () => {
             </tbody>
           </table>
         </label>
-        <label htmlFor="flexSwitchCheckDefault" className="w-100 mb-3">
+        {/* <label htmlFor="flexSwitchCheckDefault" className="w-100 mb-3">
           <div className="form-check form-switch">
             <input
               role="switch"
@@ -385,7 +382,7 @@ const EditCourse = () => {
               onChange={(e) => setCourseChecked(e.target.checked)}
             />
           </div>
-        </label>
+        </label> */}
 
         <button className="btn btn-warning w-100" type="submit">
           Добавить данные формы

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const token = localStorage.getItem("token");
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<any>([]);
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [payments, setPayments] = useState([]);
+  const [payments, setPayments] = useState<any>([]);
   const [wallets, setWallets] = useState([]);
 
   const [activeTab, setActiveTab] = useState("tab1");
@@ -14,7 +15,16 @@ const Home = () => {
     setActiveTab(tab);
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "user") {
+      navigate("/pages/category");
+    } else {
+      navigate("/");
+    }
+
     fetch("https://shohsulton.uz/api/statistc/all/users", {
       method: "GET",
       headers: {

@@ -56,7 +56,7 @@ const Categories = () => {
             <tr>
               <th>Имя</th>
               <th>Читать</th>
-              <th>Выключатель</th>
+              {/* <th>Выключатель</th> */}
               <th>Редактировать</th>
               <th>Удалить</th>
             </tr>
@@ -84,7 +84,7 @@ const Categories = () => {
                     {el.category_name}
                   </p>
                 </td>
-                <td>
+                {/* <td>
                   <div className="form-check form-switch">
                     <input
                       role="switch"
@@ -94,7 +94,7 @@ const Categories = () => {
                       checked={el.category_isactive}
                     />
                   </div>
-                </td>
+                </td> */}
                 <td>
                   <button
                     type="button"

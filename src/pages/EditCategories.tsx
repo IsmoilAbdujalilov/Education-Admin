@@ -1,41 +1,36 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const CreateCategory: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+const CreateCategory = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [categoryName, setCategoryName] = useState<string>("");
-  const [categoryImage, setCategoryImage] = useState<File | null>(null);
-  const [categoryDescription, setCategoryDescription] = useState<string>("");
-  const [categoryIsActive, setCategoryIsActive] = useState<any>(false);
+
+  const [category_name, setCategoryName] = useState<string>("");
+  const [category_image, setCategoryImage] = useState<File | null>(null);
+  const [category_description, setCategoryDescription] = useState<string>("");
+  // const [category_isactive, setCategoryIsActive] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(`https://shohsulton.uz/api/categories/${id}`)
       .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode === 200) {
-          setCategoryName(data.data.category_name);
-          setCategoryDescription(data.data.category_description);
-          setCategoryIsActive(data.data.category_isactive);
-          // You may want to handle the category image differently if it's a URL.
-          // setCategoryImage(data.data.category_image);
-        }
+      .then((data: any) => {
+        setCategoryName(data.data.category_name);
+        setCategoryDescription(data.data.category_description);
       });
-  }, [id]);
+  }, []);
 
   const sendFormData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("category_id", id!); // Non-null assertion since id is expected to be defined.
-    if (categoryImage) {
-      formData.append("category_image", categoryImage);
+    formData.append("category_id", id!);
+    formData.append("category_name", category_name);
+    formData.append("category_description", category_description);
+    if (category_image) {
+      formData.append("category_image", category_image);
     }
-    formData.append("category_description", categoryDescription);
-    formData.append("category_name", categoryName);
-
-    formData.append("category_isactive", categoryIsActive);
+    // formData.append("category_isactive", JSON.parse(String(category_isactive)));
 
     fetch("https://shohsulton.uz/api/categories", {
       method: "PUT",
@@ -46,16 +41,19 @@ const CreateCategory: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        if (data.statusCode !== 201 || data.statusCode !== 200) {
+          alert(data.message);
+        }
+
         if (data.statusCode === 200) {
           navigate("/pages/category");
         }
-      })
-      .catch((error) => console.error("Error:", error));
+      });
   };
 
   return (
-    <section className="px-3 pt-5">
-      <div className="d-flex justify-content-start py-4">
+    <section className="px-3 py-3">
+      <div className="d-flex justify-content-between py-4 mt-3">
         <button
           type="button"
           className="btn btn-warning"
@@ -66,7 +64,7 @@ const CreateCategory: React.FC = () => {
         </button>
       </div>
 
-      <form className="w-auto my-auto py-3" onSubmit={sendFormData}>
+      <form className="w-auto my-auto" onSubmit={sendFormData}>
         <label htmlFor="category_name" className="w-100 mb-3">
           Название категории
           <input
@@ -74,7 +72,7 @@ const CreateCategory: React.FC = () => {
             type="text"
             id="category_name"
             name="category_name"
-            value={categoryName}
+            value={category_name}
             placeholder="Название категории"
             className="form-control rounded mt-2"
             onChange={(e) => setCategoryName(e.target.value)}
@@ -87,27 +85,28 @@ const CreateCategory: React.FC = () => {
             type="text"
             id="category_description"
             name="category_description"
-            value={categoryDescription}
+            value={category_description}
             placeholder="Описание категории"
             className="form-control rounded mt-2"
             onChange={(e) => setCategoryDescription(e.target.value)}
           />
         </label>
 
-        <div className="form-check form-switch mb-3">
+        {/* <div className="form-check form-switch mb-3">
           <input
             id="switch"
             role="switch"
             type="checkbox"
             name="category_isactive"
-            checked={categoryIsActive}
+            checked={category_isactive}
             className="form-check-input"
             onChange={(e) => setCategoryIsActive(e.target.checked)}
           />
           <label className="form-check-label" htmlFor="switch">
             Проверенный ввод флажка переключателя
           </label>
-        </div>
+        </div> */}
+
         <label className="form-label mb-3" htmlFor="customFile">
           Пример ввода файла по умолчанию
           <input
@@ -115,9 +114,7 @@ const CreateCategory: React.FC = () => {
             id="customFile"
             className="form-control"
             onChange={(e) =>
-              setCategoryImage(
-                e.target.files?.length ? e.target.files[0] : null
-              )
+              setCategoryImage(e.target.files ? e.target.files[0] : null)
             }
           />
         </label>
